@@ -1,0 +1,23 @@
+{
+  "name": "chatbot-admin",
+  "version": "1.0.0",
+  "description": "Administrative dashboard for AI Chatbot Platform",
+  "main": "index.html",
+  "scripts": {
+    "serve": "python3 server.py",
+    "dev": "python3 server.py",
+    "start": "python3 server.py"
+  },
+  "keywords": ["chatbot", "admin", "dashboard", "ai", "management"],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "python": ">=3.8"
+  }
+}

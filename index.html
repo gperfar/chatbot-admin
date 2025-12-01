@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </li>
+                <li class="nav-item" data-section="agents">
+                    <i class="fas fa-robot"></i> Agents
+                </li>
+                <li class="nav-item" data-section="data-sources">
+                    <i class="fas fa-database"></i> Data Sources
+                </li>
+                <li class="nav-item" data-section="conversations">
+                    <i class="fas fa-comments"></i> Conversations
+                </li>
+                <li class="nav-item" data-section="analytics">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </li>
+                <li class="nav-item" data-section="settings">
+                    <i class="fas fa-sliders-h"></i> Settings
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="btn-icon">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <button id="refresh-data" class="btn-secondary">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <div class="api-status">
+                        <span class="status-indicator" id="api-status"></span>
+                        <span id="api-status-text">Checking API...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-section active" id="dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-agents">0</h3>
+                            <p>Total Agents</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-conversations">0</h3>
+                            <p>Total Conversations</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-tokens">0</h3>
+                            <p>Total Tokens Used</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="active-conversations">0</h3>
+                            <p>Active Today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Recent Conversations</h3>
+                        <div id="recent-conversations" class="recent-list">
+                            <!-- Recent conversations will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Agent Performance</h3>
+                        <div id="agent-performance" class="performance-list">
+                            <!-- Agent performance will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="agents-section">
+                <div class="section-header">
+                    <h2>Agent Management</h2>
+                    <div class="header-actions">
+                        <button id="test-agent-btn" class="btn-secondary">
+                            <i class="fas fa-comments"></i> Test Agent
+                        </button>
+                        <button id="add-agent-btn" class="btn-primary">
+                            <i class="fas fa-plus"></i> Add Agent
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="agents-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Display Name</th>
+                                <th>Model</th>
+                                <th>Status</th>
+                                <th>Conversations</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agents-table-body">
+                            <!-- Agent data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="content-section" id="data-sources-section">
+                <div class="section-header">
+                    <h2>Data Source Management</h2>
+                    <button id="add-data-source-btn" class="btn-primary">
+                        <i class="fas fa-plus"></i> Add Data Source
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="data-sources-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-sources-table-body">
+                            <!-- Data source data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="content-section" id="conversations-section">
+                <div class="section-header">
+                    <h2>Conversation History</h2>
+                    <div class="filters">
+                        <select id="agent-filter">
+                            <option value="">All Agents</option>
+                        </select>
+                        <input type="date" id="date-filter" class="filter-input">
+                        <input type="text" id="search-filter" placeholder="Search conversations..." class="filter-input">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="conversations-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Agent</th>
+                                <th>Messages</th>
+                                <th>Tokens</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="conversations-table-body">
+                            <!-- Conversation data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="content-section" id="analytics-section">
+                <h2>Analytics Dashboard</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Usage Over Time</h3>
+                        <canvas id="usage-chart"></canvas>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Agent Usage Distribution</h3>
+                        <canvas id="agent-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="settings-section">
+                <h2>System Settings</h2>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>API Configuration</h3>
+                        <div class="setting-item">
+                            <label for="api-url">API Base URL:</label>
+                            <input type="text" id="api-url" value="http://localhost:8000/api">
+                        </div>
+                        <button id="test-api-connection" class="btn-secondary">Test Connection</button>
+                    </div>
+                    <div class="settings-card">
+                        <h3>System Information</h3>
+                        <div id="system-info">
+                            <!-- System info will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Agent Modal -->
+    <div id="agent-modal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="agent-modal-title">Add Agent</h3>
+                <button class="close-btn" id="close-agent-modal">&times;</button>
+            </div>
+            <form id="agent-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="agent-name">Name *</label>
+                        <input type="text" id="agent-name" required>
+                        <small>Unique identifier (lowercase, no spaces)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-display-name">Display Name *</label>
+                        <input type="text" id="agent-display-name" required>
+                        <small>Human-readable name</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-description">Description</label>
+                        <textarea id="agent-description" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-model">Model *</label>
+                        <select id="agent-model" required>
+                            <option value="gpt-4o-mini">GPT-4o Mini</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-temperature">Temperature</label>
+                        <input type="number" id="agent-temperature" min="0" max="2" step="0.1" value="0.7">
+                        <small>0.0 = focused, 2.0 = creative</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-max-tokens">Max Tokens</label>
+                        <input type="number" id="agent-max-tokens" min="1" placeholder="No limit">
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-color">Theme Color</label>
+                        <input type="color" id="agent-color" value="#3b82f6">
+                    </div>
+                    <div class="form-group">
+                        <label for="agent-active">Active</label>
+                        <input type="checkbox" id="agent-active" checked>
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="agent-system-prompt">System Prompt *</label>
+                    <textarea id="agent-system-prompt" rows="6" required placeholder="Define the agent's personality and behavior..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancel-agent" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Agent</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Data Source Modal -->
+    <div id="data-source-modal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="data-source-modal-title">Add Data Source</h3>
+                <button class="close-btn" id="close-data-source-modal">&times;</button>
+            </div>
+            <form id="data-source-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="data-source-name">Name *</label>
+                        <input type="text" id="data-source-name" required>
+                        <small>Unique identifier for this data source</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="data-source-type">Type *</label>
+                        <select id="data-source-type" required onchange="updateDataSourceConfig()">
+                            <option value="google_sheets">Google Sheets</option>
+                            <option value="rest_api">REST API</option>
+                            <option value="database">Database</option>
+                        </select>
+                        <small id="type-disabled-note" style="display: none; color: var(--warning-color);">Type cannot be changed when editing an existing data source</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="data-source-description">Description</label>
+                        <textarea id="data-source-description" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="data-source-active">Active</label>
+                        <input type="checkbox" id="data-source-active" checked>
+                    </div>
+                </div>
+
+                <!-- Dynamic configuration based on type -->
+                <div id="data-source-config" class="data-source-config">
+                    <!-- Google Sheets Config -->
+                    <div id="google_sheets-config" class="config-section" style="display: none;">
+                        <h4>Google Sheets Configuration</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="gs-api-key">API Key *</label>
+                                <input type="password" id="gs-api-key" placeholder="Your Google API Key">
+                            </div>
+                            <div class="form-group">
+                                <label for="gs-spreadsheet-id">Spreadsheet ID *</label>
+                                <input type="text" id="gs-spreadsheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
+                            </div>
+                            <div class="form-group">
+                                <label for="gs-sheet-name">Sheet Name</label>
+                                <input type="text" id="gs-sheet-name" value="Sheet1" placeholder="Sheet1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REST API Config -->
+                    <div id="rest_api-config" class="config-section" style="display: none;">
+                        <h4>REST API Configuration</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="api-base-url">Base URL *</label>
+                                <input type="url" id="api-base-url" placeholder="https://api.example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="api-endpoint">Endpoint</label>
+                                <input type="text" id="api-endpoint" placeholder="/search">
+                                <small>Use {query} as placeholder for search terms</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="api-method">HTTP Method</label>
+                                <select id="api-method">
+                                    <option value="GET">GET</option>
+                                    <option value="POST">POST</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="api-auth-type">Authentication</label>
+                                <select id="api-auth-type" onchange="updateAuthConfig()">
+                                    <option value="">None</option>
+                                    <option value="bearer">Bearer Token</option>
+                                    <option value="basic">Basic Auth</option>
+                                    <option value="api_key">API Key</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="auth-config" class="auth-config" style="display: none;">
+                            <!-- Authentication fields will be added here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Database Config -->
+                    <div id="database-config" class="config-section" style="display: none;">
+                        <h4>Database Configuration</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="db-type">Database Type</label>
+                                <select id="db-type">
+                                    <option value="postgresql">PostgreSQL</option>
+                                    <option value="mysql">MySQL</option>
+                                    <option value="sqlite">SQLite</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="db-connection-string">Connection String *</label>
+                                <input type="password" id="db-connection-string" placeholder="postgresql://user:pass@host:5432/db">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="db-query-template">Query Template *</label>
+                                <textarea id="db-query-template" rows="3" placeholder="SELECT * FROM table WHERE column LIKE '%{query}%'"></textarea>
+                                <small>Use {query} as placeholder for search terms</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancel-data-source" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Data Source</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Agent Data Source Assignment Modal -->
+    <div id="agent-data-source-modal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="agent-data-source-modal-title">Assign Data Sources to Agent</h3>
+                <button class="close-btn" id="close-agent-data-source-modal">&times;</button>
+            </div>
+            <div id="agent-data-source-content">
+                <div class="agent-info">
+                    <h4 id="assignment-agent-name">Agent Name</h4>
+                    <p id="assignment-agent-description">Agent description</p>
+                </div>
+                <div class="assignment-list">
+                    <h4>Available Data Sources</h4>
+                    <div id="available-data-sources">
+                        <!-- Available data sources will be loaded here -->
+                    </div>
+                </div>
+                <div class="assigned-list">
+                    <h4>Assigned Data Sources</h4>
+                    <div id="assigned-data-sources">
+                        <!-- Assigned data sources will be loaded here -->
+                    </div>
+                    <div id="assignment-config" class="assignment-config" style="display: none;">
+                        <h5>Configure Selected Data Source</h5>
+                        <div class="form-group">
+                            <label for="assignment-query-trigger">Query Trigger (optional)</label>
+                            <input type="text" id="assignment-query-trigger" placeholder="e.g., sales, customers, orders">
+                            <small>Comma-separated keywords that trigger this data source (leave empty to always use)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignment-priority">Priority</label>
+                            <input type="number" id="assignment-priority" value="0" min="0" max="100">
+                            <small>Higher priority data sources are checked first (0-100)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignment-active">Active</label>
+                            <input type="checkbox" id="assignment-active" checked>
+                            <small>Uncheck to temporarily disable this data source</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="save-assignments" class="btn-primary">Save Assignments</button>
+                <button id="cancel-assignments" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Agent Modal -->
+    <div id="test-agent-modal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="test-agent-modal-title">Test Agent</h3>
+                <button class="close-btn" id="close-test-agent-modal">&times;</button>
+            </div>
+            <div id="test-agent-content">
+                <div class="test-agent-info">
+                    <h4 id="test-agent-name">Agent Name</h4>
+                    <p id="test-agent-description">Agent description</p>
+                </div>
+                <div class="test-chat-area">
+                    <div class="test-chat-messages" id="test-chat-messages">
+                        <div class="welcome-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>Start a conversation with this agent to test its responses.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="test-chat-input">
+                        <input type="text" id="test-message-input" placeholder="Type your test message..." class="filter-input">
+                        <button id="test-send-button" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation Modal -->
+    <div id="conversation-modal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="conversation-modal-title">Conversation Details</h3>
+                <button class="close-btn" id="close-conversation-modal">&times;</button>
+            </div>
+            <div id="conversation-details">
+                <!-- Conversation details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+            </div>
+            <div class="modal-body">
+                <p id="delete-message">Are you sure you want to delete this item?</p>
+            </div>
+            <div class="modal-actions">
+                <button id="cancel-delete" class="btn-secondary">Cancel</button>
+                <button id="confirm-delete" class="btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
